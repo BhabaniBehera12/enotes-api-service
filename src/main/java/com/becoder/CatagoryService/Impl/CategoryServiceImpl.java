@@ -6,13 +6,13 @@ import com.becoder.CatagoryDto.CategoryResponse;
 import com.becoder.CatagoryService.CategoryService;
 import com.becoder.Entity.Category;
 import com.becoder.Repository.CategoryRepository;
-import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -48,16 +48,43 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategory() {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findByIsDeletedFalse();
         List<CategoryDto> categoryDtoList = categories.stream().map(cat -> mapper.map(cat, CategoryDto.class)).toList();
         return categoryDtoList;
     }
 
     @Override
     public List<CategoryResponse> getActiveCategory() {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findByIsActiveTrueAndIsDeletedFalse();
         List<CategoryResponse> categoryList = categories.stream().map(cat -> mapper.map(cat, CategoryResponse.class)).toList();
 
         return categoryList;
     }
+
+
+    @Override
+    public CategoryDto getCategoryById(Integer id) {
+        Optional<Category> findByCategory = categoryRepository.findByIdAndIsDeletedFalse(id);
+        if ((findByCategory.isPresent())) {
+            Category category = findByCategory.get();
+           return mapper.map(category,CategoryDto.class);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean DeleteCategoryById(Integer id) {
+        Optional<Category> findByCategory = categoryRepository.findById(id);
+
+        if (findByCategory.isPresent()) {
+            Category category = findByCategory.get();
+            category.setIsDeleted(true);  // Soft delete
+            categoryRepository.save(category);  // Save the updated category
+            return true;  // Return true if deletion is successful
+        }
+
+        return false;  // Return false if the category was not found
+    }
 }
+
+
