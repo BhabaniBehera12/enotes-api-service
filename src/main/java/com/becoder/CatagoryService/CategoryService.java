@@ -12,5 +12,10 @@ public interface CategoryService {
 
     public List<CategoryDto> getAllCategory();
 
-    List<CategoryResponse> getActiveCategory();
+     public List<CategoryResponse> getActiveCategory();
+
+
+    public  CategoryDto getCategoryById(Integer id);
+
+    public Boolean DeleteCategoryById(Integer id);
 }
