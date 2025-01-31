@@ -5,6 +5,7 @@ import com.becoder.CatagoryDto.CategoryDto;
 import com.becoder.CatagoryDto.CategoryResponse;
 import com.becoder.CatagoryService.CategoryService;
 import com.becoder.Entity.Category;
+import com.becoder.Exception.ResourceNotFoundException;
 import com.becoder.Repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
             updateCategory(category);
         }
 //////////updated category paii heichii..
+
         category.setIsDeleted(false);
         category.setCreatedBy(1);
         category.setCreatedOn(new Date());
@@ -82,13 +84,21 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public CategoryDto getCategoryById(Integer id) {
-        Optional<Category> findByCategory = categoryRepository.findByIdAndIsDeletedFalse(id);
-        if ((findByCategory.isPresent())) {
-            Category category = findByCategory.get();
+    public CategoryDto getCategoryById(Integer id) throws Exception{
+        Category category = categoryRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
+                ()->new ResourceNotFoundException("category not found with id="+id));
+
+        if (!ObjectUtils.isEmpty(category)) {
+         category.getName().toUpperCase();
+            
+//            if (category .getName() ==null)
+//            {
+//                throw new IllegalArgumentException("name is null");
+//            }
            return mapper.map(category,CategoryDto.class);
         }
         return null;
+
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.becoder.CatagoryDto.CategoryDto;
 import com.becoder.CatagoryDto.CategoryResponse;
 import com.becoder.CatagoryService.CategoryService;
 import com.becoder.Entity.Category;
+import com.becoder.Exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -36,8 +37,10 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/category")
+    @GetMapping("/")
     public ResponseEntity<?> getAllCategory() {
+        String num=null;
+        num.toUpperCase();
         List<CategoryDto> allCategory = categoryService.getAllCategory();
 
         if (CollectionUtils.isEmpty(allCategory)) {
@@ -61,26 +64,27 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) {
+    public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws  Exception {
+
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if (ObjectUtils.isEmpty(categoryDto)) {
-            return new ResponseEntity<>("Category not found with id="+ id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Internal Server Error", HttpStatus.NOT_FOUND);
         }
-            return new ResponseEntity<>(categoryDto, HttpStatus.OK);
-        }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategoryById(@PathVariable Integer id) {
-        Boolean deleted = categoryService.DeleteCategoryById(id);  // Expects Boolean
-
-        if (deleted) {
-            return new ResponseEntity<>("Category deleted successfully: " + id, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Category not found or deletion failed", HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
 
 
-}
+            @DeleteMapping("/{id}")
+            public ResponseEntity<String> deleteCategoryById (@PathVariable Integer id){
+                Boolean deleted = categoryService.DeleteCategoryById(id);  // Expects Boolean
+
+                if (deleted) {
+                    return new ResponseEntity<>("Category deleted successfully: " + id, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Category not found or deletion failed", HttpStatus.NOT_FOUND);
+                }
+            }
+
+
+        }
 
