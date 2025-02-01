@@ -25,10 +25,10 @@ public ResponseEntity<?> handleNullPointerException(Exception exception){
 }
 
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(Exception exception){
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> handleValidationException(ValidationException exception){
 //        log.error("GlobalExceptionHandler::handleResourceNotFoundException::", exception.getMessage());
-        return  new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<>(exception.getError(), HttpStatus.BAD_REQUEST);
     }
 
 

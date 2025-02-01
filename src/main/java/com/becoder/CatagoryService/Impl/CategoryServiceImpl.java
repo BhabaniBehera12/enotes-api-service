@@ -6,6 +6,7 @@ import com.becoder.CatagoryDto.CategoryResponse;
 import com.becoder.CatagoryService.CategoryService;
 import com.becoder.Entity.Category;
 import com.becoder.Exception.ResourceNotFoundException;
+import com.becoder.Exception.Validation;
 import com.becoder.Repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,18 +23,20 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
     private ModelMapper mapper;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper mapper) {
+    private Validation validation;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper mapper, Validation validation) {
         this.categoryRepository = categoryRepository;
         this.mapper = mapper;
+        this.validation = validation;
     }
 
     @Override
     public Boolean saveCategory(CategoryDto categoryDto) {
 
-//        Category category=new Category();
-//        category.setName(categoryDto.getName());
-//        category.setDescription(categoryDto.getDescription());
-//        category.setIsActive(categoryDto.getIsActive());
+
+//validation checking
+        validation.categoryValiditaion(categoryDto);
 
         Category category=mapper.map(categoryDto, Category.class);
         if (ObjectUtils.isEmpty(category.getId())){
