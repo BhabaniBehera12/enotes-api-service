@@ -5,6 +5,7 @@ import com.becoder.CatagoryDto.CategoryDto;
 import com.becoder.CatagoryDto.CategoryResponse;
 import com.becoder.CatagoryService.CategoryService;
 import com.becoder.Entity.Category;
+import com.becoder.Exception.ExistDataException;
 import com.becoder.Exception.ResourceNotFoundException;
 import com.becoder.Exception.Validation;
 import com.becoder.Repository.CategoryRepository;
@@ -38,10 +39,18 @@ public class CategoryServiceImpl implements CategoryService {
 //validation checking
         validation.categoryValiditaion(categoryDto);
 
+        //check category exsit or not
+        Boolean exist=categoryRepository.existsByName(categoryDto.getName().trim());
+       if (exist)
+       {
+           //throw error
+           throw  new ExistDataException("Category already exist");
+
+       }
         Category category=mapper.map(categoryDto, Category.class);
         if (ObjectUtils.isEmpty(category.getId())){
             category.setIsDeleted(false);
-            category.setCreatedBy(1);
+//            category.setCreatedBy(1);
             category.setCreatedOn(new Date());
         }else {
             updateCategory(category);
@@ -64,9 +73,9 @@ public class CategoryServiceImpl implements CategoryService {
           Category existcategory = findbyid.get();
           category.setCreatedBy(existcategory.getCreatedBy());
           category.setCreatedOn(existcategory.getCreatedOn());
-          category.setIsDeleted(existcategory.getIsDeleted());
-          category.setUpdatedBy(1);
-          category.setUpdatedOn(new Date());
+          //category.setIsDeleted(existcategory.getIsDeleted());
+//          category.setUpdatedBy(1);
+//          category.setUpdatedOn(new Date());
       }
     }
 

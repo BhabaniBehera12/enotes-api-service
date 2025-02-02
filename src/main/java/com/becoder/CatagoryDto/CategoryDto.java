@@ -22,6 +22,19 @@ public class CategoryDto {
     private Integer updatedBy;
     private Date updatedOn;
 
+
+
+    public String getName() {  // Ensure this method exists
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
+
     public Integer getId() {
         return id;
     }
@@ -30,13 +43,8 @@ public class CategoryDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
 
     public String getDescription() {
         return description;

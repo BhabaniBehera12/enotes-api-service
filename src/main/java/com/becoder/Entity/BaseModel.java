@@ -1,9 +1,14 @@
 package com.becoder.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
@@ -11,29 +16,24 @@ import java.util.Date;
 @Setter
 @Getter
 @MappedSuperclass
-public class BaseModel {
-    private Boolean isActive;
-    private Boolean isDeleted;
+public abstract class BaseModel {
+@CreatedBy
+@Column(updatable = false)
     private Integer createdBy;
+
+@CreatedDate
+@Column(updatable = false)
     private Date createdOn;
+
+@LastModifiedBy
+@Column(insertable = false)
     private Integer updatedBy;
+
+@LastModifiedDate
+@Column(insertable = false)
     private Date updatedOn;
 
-    public Boolean getIsActive() {
-        return isActive;
-    }
 
-    public void setIsActive(Boolean active) {
-        isActive = active;
-    }
-
-    public Boolean getIsDeleted() { // Fix getter method name
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean deleted) { // Fix setter method name
-        isDeleted = deleted;
-    }
 
     public Integer getCreatedBy() {
         return createdBy;
