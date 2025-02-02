@@ -31,6 +31,10 @@ public ResponseEntity<?> handleNullPointerException(Exception exception){
         return  new ResponseEntity<>(exception.getError(), HttpStatus.BAD_REQUEST);
     }
 
-
+    @ExceptionHandler(ExistDataException.class)
+    public ResponseEntity<?> handleExistDataException(ExistDataException exception){
+//        log.error("GlobalExceptionHandler::handleResourceNotFoundException::", exception.getMessage());
+        return  new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    }
 
 }

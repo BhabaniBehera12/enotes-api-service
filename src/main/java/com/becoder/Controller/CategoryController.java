@@ -29,6 +29,7 @@ public class CategoryController {
     @PostMapping("/save")
     public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) {
         Boolean saveCategory = categoryService.saveCategory(categoryDto);
+
         if (saveCategory) {
             return new ResponseEntity<>("saved success", HttpStatus.CREATED);
         } else {

@@ -1,10 +1,8 @@
 package com.becoder.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -13,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-
+@EntityListeners(AuditingEntityListener.class)
 public class Category  extends BaseModel{
 
     @Id
@@ -22,6 +20,8 @@ public class Category  extends BaseModel{
     private  String name;
     private  String description;
 
+    private Boolean isActive;
+    private Boolean isDeleted;
 
     public Integer getId() {
         return id;
@@ -45,5 +45,21 @@ public class Category  extends BaseModel{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
